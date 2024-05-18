@@ -1,10 +1,14 @@
-FROM python:3.11.9-alpine3.19
+FROM python:3.11-slim
 
 WORKDIR /usr/src/app/backend
-ENV FLASK_APP=app/app
-ENV FLASK_ENV=development
 
 COPY /requirements.txt ./
 
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+# 必要なパッケージのインストールと依存関係のインストール
+RUN apt-get update && apt-get install -y \
+    python3-dev \
+    pkg-config \
+    gcc \
+    build-essential \
+    && pip install --upgrade pip \
+    && pip install -r requirements.txt

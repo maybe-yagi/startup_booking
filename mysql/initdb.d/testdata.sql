@@ -1,4 +1,4 @@
-INSERT INTO reports (is_survive, content) VALUES (true, '元気');
-INSERT INTO reports (is_survive, content) VALUES (false, '元気なし');
-INSERT INTO reports (is_survive, content) VALUES (true, '元気気味');
-INSERT INTO reports (is_survive, content) VALUES (true, '超元気');
+INSERT INTO users (name, age) VALUES ('イケメン', 19);
+INSERT INTO users (name, age) VALUES ('美女', 22);
+INSERT INTO users (name, age) VALUES ('でかい筋肉', 25);
+INSERT INTO users (name, age) VALUES ('モデル体型', 30);

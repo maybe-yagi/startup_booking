@@ -219,3 +219,7 @@ thumb
 sketch
 
 # End of https://www.toptal.com/developers/gitignore/api/flask,react,nextjs
+
+# 追加
+config.py
+migrations
