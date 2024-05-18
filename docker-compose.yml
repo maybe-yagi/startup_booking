@@ -30,6 +30,7 @@ services:
     image: mysql:8.0
     volumes:
       - ./mysql/initdb.d:/docker-entrypoint-initdb.d
+      - ./mysql/etc/my.cnf:/etc/my.cnf
     container_name: db-mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
