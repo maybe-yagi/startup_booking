@@ -1,24 +1,20 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
-app = Flask(__name__)
-
-db_uri = 'mysql+pymysql://user:password@mysql:3306/database?charset=utf8mb4'
-app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
-db = SQLAlchemy(app)
+from app.config import config
 
 
-class Users(db.Model):
-    __tablename__ = "users"
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    age = db.Column(db.Integer)
+db = SQLAlchemy()
 
 
-@app.route('/')
-def select_sql():
+def create_app(config_key):
+    app = Flask(__name__)
 
-    users = Users.query.all()
-    print(users)
-    print("ユーザー一覧")
+    app.config.from_object(config[config_key])
 
-    return render_template('view.html', users=users)
+    db.init_app(app)
+
+    from app.user_crud import views as user_crud_views
+
+    app.register_blueprint(user_crud_views.user_crud, url_prefix="/")
+
+    return app
