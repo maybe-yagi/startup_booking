@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
+from flask_migrate import Migrate
 from app.config import config
 
 
@@ -15,6 +16,7 @@ def create_app(config_key):
 
     db.init_app(app)
     csrf.init_app(app)
+    migrate = Migrate(app, db)
 
     from app.user_crud import views as user_crud_views
 
