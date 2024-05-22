@@ -1,6 +1,7 @@
 from flask import request
 
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, jsonify
+from flask_login import LoginManager, login_required, logout_user, current_user
 
 from app.app import db
 from app.user_crud.models import Users
@@ -22,19 +23,24 @@ def index():
 @user_crud.route("/users")
 def users():
     users = Users.query.all()
-    return render_template("index.html", users=users)
+    users_list = [{
+        "id": user.id,
+        "name": user.name,
+        "nickname": user.nickname,
+        "email": user.email,
+        "role": user.role_id,
+        } for user in users]
+    return jsonify(users=users_list)
 
 
 @user_crud.route("/user_register", methods=["POST", "GET"])
 def user_register():
-    form = UserForm()
-    if form.validate_on_submit():
-        user = Users(
-            name=form.name.data,
-            age=form.age.data,
-        )
-        db.session.add(user)
-        db.session.commit()
-        return redirect(url_for("user_crud.users"))
+    data = request.get_json()
+    name = data['name']
+    nickname = data['nickname']
+    email = data['email']
+    student_num = data['student_num']
+    role_id = data['role_id']
+    password = data['password']
 
     return render_template("user_register.html", form=form)
