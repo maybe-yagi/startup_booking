@@ -17,7 +17,7 @@ user_crud = Blueprint(
 
 @user_crud.route("/")
 def index():
-    return render_template("home.html")
+    return render_template("user_crud/home.html")
 
 
 @user_crud.route("/users")
@@ -28,19 +28,28 @@ def users():
         "name": user.name,
         "nickname": user.nickname,
         "email": user.email,
-        "role": user.role_id,
+        "role_id": user.role_id,
         } for user in users]
-    return jsonify(users=users_list)
+    # return jsonify(users=users_list)
+    # バックエンドテスト用
+    return render_template("user_crud/index.html", users_list=users_list)
 
 
-@user_crud.route("/user_register", methods=["POST", "GET"])
+@user_crud.route("/user_register", methods=["POST"])
 def user_register():
-    data = request.get_json()
-    name = data['name']
-    nickname = data['nickname']
-    email = data['email']
-    student_num = data['student_num']
-    role_id = data['role_id']
-    password = data['password']
+    data = request.json
+    if 'password' not in data:
+        return jsonify({'error': 'Password is required'}), 400
 
-    return render_template("user_register.html", form=form)
+    user = Users(
+        name=data['name'],
+        nickname=data['nickname'],
+        email=data['email'],
+        student_num=data['student_num'],
+        role_id=data['role_id']
+    )
+    user.password = data['password']
+
+    db.session.add(user)
+    db.session.commit()
+    return jsonify({'message': 'User added successfully'}), 201

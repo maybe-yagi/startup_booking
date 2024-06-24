@@ -1,9 +1,30 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { useState, useEffect } from 'react';
+
+const Home = () => {
+  const [users, setUsers] = useState([]);
+  const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL + '/users';
+
+  useEffect(() => {
+    fetch(apiUrl, {
+      credentials: 'include'
+    })
+      .then(response => response.json())
+      .then(data => setUsers(data));
+  }, []);
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h2>スタートアップ支援予約システム</h2>
-    </main>
+    <div>
+      <h1>User List</h1>
+      <ul>
+        {users.map(user => (
+          <li key={user.id}>{user.name} ({user.email})</li>
+        ))}
+      </ul>
+      <a href="/user_register">ユーザー登録へ</a>
+    </div>
   );
-}
+};
+
+export default Home;

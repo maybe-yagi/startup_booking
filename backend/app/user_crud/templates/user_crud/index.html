@@ -1,0 +1,9 @@
+{% extends "user_crud/base.html" %}
+{% block title %}
+ユーザー一覧
+{% endblock %}
+{% block content %}
+{% for user in users_list %}
+<p>{{ user.name }}, {{ user.age }}</p>
+{% endfor %}
+{% endblock %}

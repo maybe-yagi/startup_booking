@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from flask_migrate import Migrate
 from flask_login import LoginManager, login_required, logout_user, current_user
+from flask_cors import CORS
 from app.config import config
 
 
@@ -20,13 +21,10 @@ def create_app(config_key):
     csrf.init_app(app)
     Migrate(app, db)
     login_manager.init_app(app)
+    CORS(app, supports_credentials=True)
 
     from app.user_crud import views as user_crud_views
 
     app.register_blueprint(user_crud_views.user_crud, url_prefix="/")
-
-    from app.auth import views as auth_views
-
-    app.register_blueprint(auth_views.auth, url_prefix="/auth")
 
     return app
