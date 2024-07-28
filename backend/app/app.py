@@ -18,10 +18,10 @@ def create_app(config_key):
     app.config.from_object(config[config_key])
 
     db.init_app(app)
-    csrf.init_app(app)
+    # csrf.init_app(app)
     Migrate(app, db)
     login_manager.init_app(app)
-    CORS(app, supports_credentials=True)
+    CORS(app)
 
     from app.user_crud import views as user_crud_views
 
